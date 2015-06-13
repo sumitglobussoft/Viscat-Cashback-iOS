@@ -1,0 +1,74 @@
+AddThis iOS SDK ChangeLog
+
+Version 0.3.0
+
+- Included the new Facebook iOS SDK 3.1
+- Update to remove deprecated Facebook methods
+- Added support for armv7s
+- Fixed warnings
+
+Version 0.2.0
+
+- Included the new Facebook iOS SDK 3.0
+- Analytics tracking fix
+- Renamed Rechability classes
+
+Version 0.1.9 (released 2012-05-29)
+
+- Added setter for ModalTransitionStyle.
+- Fixed issue with Twitter OAuth UI.
+- Added setter for a root view controller from which the menu can be presented.
+- Fixed the warning of unbalanced calls.
+- Included new Facebook SDK.
+- Fixed memory leak in Facebook share.
+
+Version 0.1.8 (released 2012-05-23)
+
+- Fixed issue inside the ATResources bundle that caused error while making distribution builds
+
+Version 0.1.7 (released 2012-02-01)
+
+- Fixed crash in native email sharing in iOS 5.
+- Fixed issue of null string getting posted in Twitter image sharing.
+
+Version 0.1.6 (released 2011-12-28)
+
+- Moved the AddThis database file from Document directory to Cache.
+- Added a new method for showing/hiding the 'More' services from AddThis Menu.
+- Fixed issue with Facebook image sharing.
+
+Version 0.1.5 (released 2011-11-2)
+
+- Included a new method for the developer to give the blacklisted services as a single NSArray.
+
+Version 0.1.4 (released 2011-11-01)
+
+- Updated the Facebook SDK with the latest.
+
+Version 0.1.3 (released 2011-10-20)
+
+- Facebook sharing issue fixed.
+
+Version 0.1.2 (released 2011-10-18)
+
+- Made the pubid a permanent field and an alert will be shown if the id is not provided.
+
+Version 0.1.1 (released 2011-10-04)
+
+- Included the Twitter api of iOS 5 SDK.
+
+Version 0.1.0 (released 2011-08-23)
+
+- Added new Twitter sharing parameters.
+- Included an alert if the developer has not changed the Twitter/Facebook keys.
+
+Version 0.0.9 (released 2011-07-12)
+
+- Fixed issue with Facebook Connect.
+
+Version 0.0.8 (released 2011-06-21)
+
+- Fixed issue in the non responsive Send button in Twitter share view.
+- Included an option to programmatically logout from non-OExchange services.
+
+

@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CollectionheaderView : UICollectionReusableView
-
+@interface CollectionheaderView : UICollectionReusableView<UIScrollViewDelegate>
+{
+    UIImageView * headerImage;
+    
+}
 @property(nonatomic)UILabel * headrLabel, *subHeader ,* footerLabel;
+@property(nonatomic,strong) UIPageControl * pageControle;
 @end

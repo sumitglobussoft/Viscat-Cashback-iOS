@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import "Reachability.h"
+#import "CustomMenuViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -18,9 +20,12 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+@property (nonatomic, strong) Reachability *internetReachability;
+@property(nonatomic,strong)UITabBarController * tabbarController;
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 
-
+//+(CustomMenuViewController*)goToHomeView;
+-(void)goToHomeView;
 @end
 

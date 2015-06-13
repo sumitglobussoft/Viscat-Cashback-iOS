@@ -1,0 +1,41 @@
+=========================================================================
+==	NOTICE file corresponding to the iOS SDK                      ==
+=========================================================================
+AddThis
+Copyright 2010-2011 AddThis LLC. All rights reserved.
+
+=========================================================================
+==	Facebook Connect iOS SDK                                       ==
+=========================================================================
+
+The Facebook native sharing for the library is implemented using the 
+Facebook Connect iOS SDK 3.0
+
+Copyright 2010 Facebook, Inc.
+
+=========================================================================
+==	OAuth library by Jon Corsby                                    ==
+=========================================================================
+
+OAuth sharing in Twitter and Twitpic is implemented using the OAuth 
+Library by Jon Corsby. This library is under MIT License.
+Memory leak in OADataFetcher on the method 'fetchDataWithRequest:delegate: didFinishSelector:didFailSelector:' has been fixed. 
+Code snippet has been added at the end of the method 'prepare' in OAMutableURLRequest to ignore Authorization header while using TwitPic.
+
+Copyright 2007 Kaboomerang LLC.
+
+=========================================================================
+==	JSON framework by Stig Brautaset                               ==
+=========================================================================
+
+JSON parsing is implemented using the JSON framework which is under BSD license (3-clause) license.
+Stig Brautaset
+
+Copyright (C) 2009 
+
+=========================================================================
+==	    Reachability class from Apple                               ==
+=========================================================================
+
+Reachability class provided by Apple is included in the SDK. If you have already included this in your project you should remove one in order to avoid duplicate class definition error.
+

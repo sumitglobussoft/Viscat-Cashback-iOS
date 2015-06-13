@@ -17,14 +17,28 @@
 
 @implementation ProfileEditViewController
 
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:YES];
+    self.navigationController.navigationBar.hidden=YES;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+     self.view.backgroundColor=[UIColor whiteColor];
     windowSize =[UIScreen mainScreen].bounds.size;
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(createUI) name:@"profileEdit" object:nil];
     
   
-    //[self createUI];
+    [self createUI];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -40,14 +54,25 @@
     
     self.scrollView=[[UIScrollView alloc]init];
     self.scrollView.frame=CGRectMake(0,0, windowSize.width, windowSize.height);
-    self.scrollView.contentSize=CGSizeMake(windowSize.width, windowSize.height*1.2);
+    if (windowSize.height>500) {
+        if (windowSize.height==736) {
+            self.scrollView.contentSize=CGSizeMake(windowSize.width, windowSize.height);
+        }
+        else{
+            self.scrollView.contentSize=CGSizeMake(windowSize.width, windowSize.height*1.2);
+        }
+    }
+    else{
+         self.scrollView.contentSize=CGSizeMake(windowSize.width, windowSize.height*1.4);
+    }
+   
     [self.scrollView setShowsVerticalScrollIndicator:NO];
     [self.view addSubview:self.scrollView];
     
     myProfileEdit=[[UILabel alloc]init];
     myProfileEdit.frame=CGRectMake(10, 10, 150, 30);
     myProfileEdit.text=@"내프로필-개인정보변경";
-    myProfileEdit.font=[UIFont systemFontOfSize:12];
+    myProfileEdit.font=[UIFont systemFontOfSize:14];
     [self.scrollView addSubview:myProfileEdit];
     
     imageView=[[UIImageView alloc]init];
@@ -73,73 +98,92 @@
     self.userNameTXt.textColor=[UIColor lightGrayColor];
     self.userNameTXt.font=[UIFont systemFontOfSize:12];
     self.userNameTXt.userInteractionEnabled=NO;
+    self.userNameTXt.textAlignment=NSTextAlignmentCenter;
     [self.scrollView addSubview:self.userNameTXt];
     
     self.nameTxt=[[UITextField alloc]init];
-    self.nameTxt.frame=CGRectMake(self.scrollView.frame.size.width/2-20, 100, 145, 26);
+    self.nameTxt.frame=CGRectMake(self.scrollView.frame.size.width/2-20, 100, 145, 27);
     self.nameTxt.delegate=self;
-    self.nameTxt.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"text_fill.png"]];
+    //self.nameTxt.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"text_fill.png"]];
     self.nameTxt.text=[SingletonClass sharedSingleton].fname;
     self.nameTxt.font=[UIFont systemFontOfSize:12];
+    [self.nameTxt setBackground:[UIImage imageNamed:@"text_fill.png"]];
+     self.nameTxt.textAlignment=NSTextAlignmentCenter;
     [self.scrollView addSubview:self.nameTxt];
     
        self.emailTxt=[[UITextField alloc]init];
     self.emailTxt.frame=CGRectMake(self.scrollView.frame.size.width/2-20, 140, 145, 26);
     self.emailTxt.delegate=self;
-    self.emailTxt.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"text_fill.png"]];
+    //self.emailTxt.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"text_fill.png"]];
     self.emailTxt.text=[SingletonClass sharedSingleton].userEmail;
     self.emailTxt.font=[UIFont systemFontOfSize:12];
+    [self.emailTxt setBackground:[UIImage imageNamed:@"text_fill.png"]];
+     self.emailTxt.textAlignment=NSTextAlignmentCenter;
     [self.scrollView addSubview:self.emailTxt];
     
     self.address=[[UITextField alloc]init];
     self.address.frame=CGRectMake(self.scrollView.frame.size.width/2-20, 180, 145, 26);
     self.address.delegate=self;
-    self.address.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"text_fill.png"]];
+    //self.address.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"text_fill.png"]];
     self.address.font=[UIFont systemFontOfSize:12];
+    [self.address setBackground:[UIImage imageNamed:@"text_fill.png"]];
+     self.address.textAlignment=NSTextAlignmentCenter;
     [self.scrollView addSubview:self.address];
     
     self.streeTxt=[[UITextField alloc]init];
     self.streeTxt.frame=CGRectMake(self.scrollView.frame.size.width/2-20, 220, 145, 26);
     self.streeTxt.delegate=self;
-    self.streeTxt.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"text_fill.png"]];
+   // self.streeTxt.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"text_fill.png"]];
     self.streeTxt.font=[UIFont systemFontOfSize:12];
+    [self.streeTxt setBackground:[UIImage imageNamed:@"text_fill.png"]];
+     self.streeTxt.textAlignment=NSTextAlignmentCenter;
     [self.scrollView addSubview:self.streeTxt];
 
     self.postalCode=[[UITextField alloc]init];
     self.postalCode.frame=CGRectMake(self.scrollView.frame.size.width/2-20, 260, 145, 26);
     self.postalCode.delegate=self;
-    self.postalCode.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"text_fill.png"]];
+   // self.postalCode.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"text_fill.png"]];
     self.postalCode.font=[UIFont systemFontOfSize:12];
+    [self.postalCode setBackground:[UIImage imageNamed:@"text_fill.png"]];
+     self.postalCode.textAlignment=NSTextAlignmentCenter;
     [self.scrollView addSubview:self.postalCode];
 
     
     self.phoneNoTxt=[[UITextField alloc]init];
     self.phoneNoTxt.frame=CGRectMake(self.scrollView.frame.size.width/2-20, 300, 145, 26);
     self.phoneNoTxt.delegate=self;
-    self.phoneNoTxt.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"text_fill.png"]];
+   // self.phoneNoTxt.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"text_fill.png"]];
     self.phoneNoTxt.font=[UIFont systemFontOfSize:12];
+    [self.phoneNoTxt setBackground:[UIImage imageNamed:@"text_fill.png"]];
+     self.phoneNoTxt.textAlignment=NSTextAlignmentCenter;
     [self.scrollView addSubview:self.phoneNoTxt];
     
 
     self.oldPasswordTxt=[[UITextField alloc]init];
     self.oldPasswordTxt.frame=CGRectMake(self.scrollView.frame.size.width/2-20, 380, 145, 26);
     self.oldPasswordTxt.delegate=self;
-    self.oldPasswordTxt.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"text_fill.png"]];
+    //self.oldPasswordTxt.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"text_fill.png"]];
     self.oldPasswordTxt.font=[UIFont systemFontOfSize:12];
+    [self.oldPasswordTxt setBackground:[UIImage imageNamed:@"text_fill.png"]];
+     self.oldPasswordTxt.textAlignment=NSTextAlignmentCenter;
     [self.scrollView addSubview:self.oldPasswordTxt];
 
     self.passwordTxt=[[UITextField alloc]init];
     self.passwordTxt.frame=CGRectMake(self.scrollView.frame.size.width/2-20, 420, 145, 26);
     self.passwordTxt.delegate=self;
-    self.passwordTxt.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"text_fill.png"]];
+    //self.passwordTxt.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"text_fill.png"]];
+    [self.passwordTxt setBackground:[UIImage imageNamed:@"text_fill.png"]];
     self.passwordTxt.font=[UIFont systemFontOfSize:12];
+     self.passwordTxt.textAlignment=NSTextAlignmentCenter;
     [self.scrollView addSubview:self.passwordTxt];
 
     self.confimPassTxt=[[UITextField alloc]init];
-    self.confimPassTxt.frame=CGRectMake(self.scrollView.frame.size.width/2-20, 460, 145, 26);
+    self.confimPassTxt.frame=CGRectMake(self.scrollView.frame.size.width/2-20, 460, 145, 27);
     self.confimPassTxt.delegate=self;
-    self.confimPassTxt.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"text_fill.png"]];
+   // self.confimPassTxt.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"text_fill.png"]];
     self.confimPassTxt.font=[UIFont systemFontOfSize:12];
+    [self.confimPassTxt setBackground:[UIImage imageNamed:@"text_fill.png"]];
+     self.confimPassTxt.textAlignment=NSTextAlignmentCenter;
     [self.scrollView addSubview:self.confimPassTxt];
 
     
@@ -241,12 +285,14 @@
     
     
     cancel1=[UIButton buttonWithType:UIButtonTypeCustom];
-    cancel1.frame=CGRectMake(self.scrollView.frame.size.width-70, 340, 38, 26);
+    cancel1.frame=CGRectMake(self.scrollView.frame.size.width/2+80, 340, 38, 26);
      [cancel1 setBackgroundImage:[UIImage imageNamed:@"cancel_btn.png"] forState:UIControlStateNormal];
+   [ cancel1 addTarget:self action:@selector(updateCancel:) forControlEvents:UIControlEventTouchUpInside];
     [self.scrollView addSubview:cancel1];
     
+    
     updateButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    updateButton.frame=CGRectMake(self.scrollView.frame.size.width-150, 340, 64, 26);
+    updateButton.frame=CGRectMake(self.scrollView.frame.size.width/2+10, 340, 64, 26);
     [updateButton setBackgroundImage:[UIImage imageNamed:@"update_btn.png"] forState:UIControlStateNormal];
     [updateButton addTarget:self action:@selector(profileUpdateAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.scrollView addSubview:updateButton];
@@ -258,12 +304,13 @@
 
     
     cancel2=[UIButton buttonWithType:UIButtonTypeCustom];
-    cancel2.frame=CGRectMake(self.scrollView.frame.size.width-70, 500, 38, 26);
+    cancel2.frame=CGRectMake(self.scrollView.frame.size.width/2+100, 500, 38, 26);
     [cancel2 setBackgroundImage:[UIImage imageNamed:@"cancel_btn.png"] forState:UIControlStateNormal];
+     [cancel2 addTarget:self action:@selector(passwordCancel:) forControlEvents:UIControlEventTouchUpInside];
     [self.scrollView addSubview:cancel2];
     
     changePass=[UIButton buttonWithType:UIButtonTypeCustom];
-    changePass.frame=CGRectMake(self.scrollView.frame.size.width-190, 500, 110, 27);
+    changePass.frame=CGRectMake(self.scrollView.frame.size.width/2-20, 500, 110, 27);
     [changePass setBackgroundImage:[UIImage imageNamed:@"change_password_btn.png"] forState:UIControlStateNormal];
     [changePass addTarget:self action:@selector(changePassAction) forControlEvents:UIControlEventTouchUpInside];
     [self.scrollView addSubview:changePass];
@@ -273,7 +320,25 @@
     bottomLbl.textColor=[UIColor lightGrayColor];
     bottomLbl.font=[UIFont systemFontOfSize:10];
     bottomLbl.text=@"회사소개 / 뉴스 / 규정&조건 / 개인정보보호 / 연락하기";
-    [self.scrollView addSubview:bottomLbl];
+  //  [self.scrollView addSubview:bottomLbl];
+    
+    
+    
+    /*UILabel*   bottomLbl1=[[UILabel alloc]init];
+    bottomLbl1.frame=CGRectMake(20, 550, self.scrollView.frame.size.width-40,30);
+    bottomLbl1.textColor=[UIColor lightGrayColor];
+    bottomLbl1.font=[UIFont systemFontOfSize:10];
+    bottomLbl1.textAlignment=NSTextAlignmentCenter;
+    bottomLbl1.text=@"회사소개 / 뉴스 / 규정&조건 / 개인정보보호 / 연락하기";
+    [self.scrollView addSubview:bottomLbl1];
+    
+    UILabel * copyRight=[[UILabel alloc]init];
+    copyRight.frame=CGRectMake(20, 570, self.scrollView.frame.size.width-40,30);
+    copyRight.textColor=[UIColor lightGrayColor];
+    copyRight.font=[UIFont systemFontOfSize:10];
+    copyRight.textAlignment=NSTextAlignmentCenter;
+    copyRight.text=@"2014년비스켓캐시백";
+    [self.scrollView addSubview:copyRight];*/
     
     self.pickerView=[[UIPickerView alloc]init];
     self.pickerView.frame=CGRectMake(0, windowSize.height/2+20, windowSize.width, (windowSize.height/2));
@@ -282,6 +347,9 @@
     self.pickerView.backgroundColor=[UIColor lightGrayColor];
     [self.view addSubview:self.pickerView];
     self.pickerView.hidden=YES;
+    
+    
+  
     
 }
 
@@ -353,18 +421,23 @@
     }
     else{
         NSString * url=[NSString stringWithFormat:@"http://www.biscash.com/windex.php?method=editprofile&user_id=%@&email=%@&fname=%@",[SingletonClass sharedSingleton].login_userId,self.emailTxt.text,self.nameTxt.text];
+        url=[url stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         
         if ([self.address.text length]!=0) {
             url=[NSString stringWithFormat:@"http://www.biscash.com/windex.php?method=editprofile&user_id=%@&email=%@&fname=%@&address=%@",[SingletonClass sharedSingleton].login_userId,self.emailTxt.text,self.nameTxt.text,self.address.text];
+            url=[url stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
         if ([self.postalCode.text length]!=0) {
            url= [NSString stringWithFormat:@"http://www.biscash.com/windex.php?method=editprofile&user_id=%@&email=%@&fname=%@&address=%@&zip=%@",[SingletonClass sharedSingleton].login_userId,self.emailTxt.text,self.nameTxt.text,self.address.text,self.postalCode.text];
+            url=[url stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
         if ([self.streeTxt.text length]!=0) {
           url= [NSString stringWithFormat:@"http://www.biscash.com/windex.php?method=editprofile&user_id=%@&email=%@&fname=%@&address=%@&zip=%@&street=%@",[SingletonClass sharedSingleton].login_userId,self.emailTxt.text,self.nameTxt.text,self.address.text,self.postalCode.text,self.streeTxt.text];
+            url=[url stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
         if ([self.phoneNoTxt.text length]!=0) {
        url= [NSString stringWithFormat:@"http://www.biscash.com/windex.php?method=editprofile&user_id=%@&email=%@&fname=%@&address=%@&zip=%@&street=%@&phone=%@",[SingletonClass sharedSingleton].login_userId,self.emailTxt.text,self.nameTxt.text,self.address.text,self.postalCode.text,self.streeTxt.text,self.phoneNoTxt.text];
+            url=[url stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
         
         NSError * error;
@@ -443,4 +516,21 @@
     return str;
 }
 
+-(void)passwordCancel:(UIButton *)sender{
+    self.oldPasswordTxt.text=nil;
+    self.passwordTxt.text=nil;
+    self.confimPassTxt.text=nil;
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"HomeScreen" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"HomeScreen" object:nil];
+}
+
+-(void)updateCancel:(UIButton *)sender{
+   
+    self.address.text=nil;
+    self.streeTxt.text=nil;
+    self.postalCode.text=nil;
+    self.phoneNoTxt.text=nil;
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"HomeScreen" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"HomeScreen" object:nil];
+}
 @end

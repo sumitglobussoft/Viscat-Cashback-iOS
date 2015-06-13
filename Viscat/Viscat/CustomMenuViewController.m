@@ -14,11 +14,21 @@
 #import "SingletonClass.h"
 #import "ViewController.h"
 
+#import "HomeViewController.h"
+#import "BalanceViewController.h"
+#import "ClickHistoryViewController.h"
+#import "ProfileEditViewController.h"
+#import "HistoryViewController.h"
+#import "EventViewController.h"
+
 
 @interface CustomMenuViewController ()
 {
     ViewController * viewVC;
     NSArray * menuIcon2,*menuIcon1;
+    LoginViewController * loginVc;
+    AppDelegate * appdeledate;
+    UITabBarItem * home;
 }
 @end
 
@@ -34,6 +44,15 @@
 }
 
 
+-(AppDelegate*)appdelegate{
+    return [UIApplication sharedApplication].delegate;
+}
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:YES];
+    self.navigationController.navigationBar.hidden=YES;
+    
+}
+
 
 #pragma mark -
 -(void) setViewControllers:(NSArray *)viewControllers{
@@ -48,15 +67,19 @@
     }
     
 }
--(void) setSecondSectionViewControllers:(NSArray *)secondSectionViewControllers{
-    _secondSectionViewControllers = [secondSectionViewControllers copy];
+-(void)setSignupViewController:(NSArray*)signupViewController
+{
+    _signupViewController = [signupViewController copy];
     
-    for (UIViewController *viewController in self.secondSectionViewControllers ) {
+    for (UIViewController *viewController in _signupViewController) {
         [self addChildViewController:viewController];
         viewController.view.frame = CGRectMake(0, 55,[UIScreen mainScreen].bounds.size.width , [UIScreen mainScreen].bounds.size.height-55);
+        
         [viewController didMoveToParentViewController:self];
     }
+
 }
+
 -(void) setSelectedViewController:(UIViewController *)selectedViewController{
     _selectedViewController = selectedViewController;
 }
@@ -73,6 +96,7 @@
 }
 #pragma  mark- reload Table
 -(void)reloadTable{
+    self.customBar.selectedItem=home;
     BOOL signIn=[[NSUserDefaults standardUserDefaults]boolForKey:@"signIn"];
     if (signIn) {
         self.selectedIndex=0;
@@ -95,7 +119,7 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(afterSignIn) name:@"HomeScreen" object:nil];
     
     
-    menuIcon2=[NSArray arrayWithObjects:@"home_menuicon.png",@"balance_menuicon.png",@"payment_menuicon.png",@"paymenthistory_menuicon.png",@"cashwithdraw_menuicon.png",@"sharing_friends_menuicon.png",@"profileedit_menuicon.png", nil];
+    menuIcon2=[NSArray arrayWithObjects:@"home_menuicon.png",@"payment_menuicon.png",@"clickhistory_menuicon.png",@"cashwithdraw_menuicon.png",@"profileedit_menuicon.png", nil];
     menuIcon1=[NSArray arrayWithObjects:@"home_menuicon.png",@"login_menuicon.png",@"signup_menuicon.png", nil];
     
     //Add View SubView;
@@ -126,14 +150,22 @@
     
     [self.mainsubView addSubview:self.contentContainerView];
     self.headerView = [[UIView alloc] initWithFrame:frame];
-    self.headerView.backgroundColor=[UIColor whiteColor];
+    self.headerView.backgroundColor=[UIColor colorWithRed:(CGFloat)249/255 green:(CGFloat)117/255 blue:(CGFloat)0/255 alpha:1];
     [self.mainsubView addSubview:self.headerView];
+    self.headerView.layer.shadowColor=[UIColor blackColor].CGColor;
+    self.headerView.layer.shadowOffset=CGSizeMake(0, 5);
+    self.headerView.layer.shadowOpacity=0.5;
+    self.headerView.layer.shadowRadius=3;
+    self.headerView.layer.shadowPath=[UIBezierPath bezierPathWithRect:self.headerView.bounds].CGPath;
+    
     NSLog(@"Width menu== %f",self.view.frame.size.width);
     
-    self.headerTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 20, self.view.frame.size.width-120, 25)];
-    self.headerTitleLabel.textColor = [UIColor colorWithRed:(CGFloat)79/255 green:(CGFloat)167/255 blue:(CGFloat)229/255 alpha:1];
+    self.headerTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 25, self.view.frame.size.width-120, 25)];
+    //self.headerTitleLabel.textColor = [UIColor colorWithRed:(CGFloat)79/255 green:(CGFloat)167/255 blue:(CGFloat)229/255 alpha:1];
+    self.headerTitleLabel.textColor = [UIColor whiteColor];
     self.headerTitleLabel.textAlignment = NSTextAlignmentCenter;
     self.headerTitleLabel.font = [UIFont boldSystemFontOfSize:15];
+    self.headerTitleLabel.text= @"비스켓캐쉬백";
     [self.headerView addSubview:self.headerTitleLabel];
     
     //============================
@@ -146,10 +178,11 @@
     
     //self.menuButton.titleLabel.layer.
     [self.menuButton addTarget:self action:@selector(menuButtonClciked:) forControlEvents:UIControlEventTouchUpInside];
-    self.menuButton.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"menu.png"]];
-    
+    [self.menuButton setBackgroundImage:[UIImage imageNamed:@"menu_new.png"] forState:UIControlStateNormal];
     [self.headerView addSubview:self.menuButton];
     
+    
+   
     //===================================
     
     self.selectedIndex = 0;
@@ -163,9 +196,104 @@
     self.swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGesture:)];
     self.swipeGesture.direction = UISwipeGestureRecognizerDirectionRight;
     [self.mainsubView addGestureRecognizer:self.swipeGesture];
-   
+ 
+    
+    
+    //==================================
+    
+    //Add tabbar
+    
+     home=[[UITabBarItem alloc]initWithTitle:@"홈"image:[UIImage imageNamed:@"home_menuicon.png"] selectedImage:[UIImage imageNamed:@"home_active_menuicon.png"]];
+    home.tag=0;
+    
+    
+    UITabBarItem * Balance=[[UITabBarItem alloc]initWithTitle:@"내역" image:[UIImage imageNamed:@"bigsafe_icon.png"] selectedImage:[UIImage imageNamed:@"bigsafe_active_icon.png"]];
+    Balance.tag=2;
+    
+    UITabBarItem * History=[[UITabBarItem alloc]initWithTitle:@"잔고" image:[UIImage imageNamed:@"history_menuicon"] selectedImage:[UIImage imageNamed:@"history_active_menuicon.png"]];
+    History.tag=1;
+    
+    UITabBarItem * Invite=[[UITabBarItem alloc]initWithTitle:@"친구에게 소개하기" image:[UIImage imageNamed:@"user_icon.png"] selectedImage:[UIImage imageNamed:@"user_icon_active.png"]];
+    Invite.tag=3;
+    
+    UITabBarItem * event=[[UITabBarItem alloc]initWithTitle:@"행사" image:[UIImage imageNamed:@"calendar_icon.png"] selectedImage:[UIImage imageNamed:@"calendar_active_icon.png"]];
+    event.tag=4;
+    
+    
+    self.customBar.items = @[home,History,Balance,Invite,event];
+    self.customBar = [[UITabBar alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-45, self.view.frame.size.width, 50)];
+    self.customBar.delegate = self;
+    self.customBar.items = @[home,History,Balance, Invite,event];
+    self.customBar.selectedItem = home;
+    self.customBar.barTintColor = [UIColor colorWithRed:(CGFloat)170/255 green:(CGFloat)173/255 blue:(CGFloat)173/255 alpha:1.0];
+    [[UITabBar appearance] setSelectedImageTintColor:[UIColor colorWithRed:(CGFloat)249/255 green:(CGFloat)117/255 blue:(CGFloat)0/255 alpha:1.0]];
+    [self.mainsubView addSubview:self.customBar];
+    
+    
+    HomeViewController * homeVC=[[HomeViewController alloc]init];
+    homeVC.title=@"홈";
+    [self addChildViewController:homeVC];
+    
+    HistoryViewController * HistoryVC=[[HistoryViewController alloc]init];
+    HistoryVC.title=@"내역";
+     [self addChildViewController:HistoryVC];
+    
+    BalanceViewController* balanceVC=[[BalanceViewController alloc]init];
+    balanceVC.title=@"잔고";
+    [self addChildViewController:balanceVC];
+    
+    
+    InviteFriendViewController * inviteVC=[[InviteFriendViewController alloc]init];
+    inviteVC.title=@"친구에게 소개하기" ;
+    [self addChildViewController:inviteVC];
+    
+    EventViewController * eventVC=[[EventViewController alloc]init];
+    eventVC.title=@"행사" ;
+    [self addChildViewController:eventVC];
+
+    
+     loginVc=[[LoginViewController alloc]init];
+     [self addChildViewController:loginVc];
+    
+    UINavigationController *homeNavi = [[UINavigationController alloc] initWithRootViewController:homeVC];
+    homeNavi.navigationBar.hidden = YES;
+       UINavigationController *HistoryVCNavi = [[UINavigationController alloc] initWithRootViewController:HistoryVC];
+    HistoryVCNavi.navigationBar.hidden = YES;
+    UINavigationController *balanceVCNavi = [[UINavigationController alloc] initWithRootViewController:balanceVC];
+    balanceVCNavi.navigationBar.hidden = YES;
+    UINavigationController *inviteVCNavi = [[UINavigationController alloc] initWithRootViewController:inviteVC];
+    inviteVCNavi.navigationBar.hidden = YES;
+    UINavigationController *eventVCNavi = [[UINavigationController alloc] initWithRootViewController:eventVC];
+    eventVCNavi.navigationBar.hidden = YES;
+
+    NSArray *tabBarArray = @[homeNavi,HistoryVCNavi,balanceVCNavi,inviteVCNavi,eventVCNavi];
+    tabArr=[tabBarArray copy];
+    
+    loginArr=@[loginVc];
+    
 }
 
+-(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item{
+  
+    BOOL signIn=[[NSUserDefaults standardUserDefaults]boolForKey:@"signIn"];
+    if (!signIn) {
+        if (item.tag==0) {
+            UIViewController *newViewController = [tabArr objectAtIndex:0];
+            [self getSelectedViewControllers:newViewController];
+        }
+        else{
+            [SingletonClass sharedSingleton].isFromTab=YES;
+            UIViewController *newViewController = [loginArr objectAtIndex:0];
+            [self getSelectedViewControllers:newViewController];
+            }
+    }
+    else{
+        UIViewController *newViewController = [tabArr objectAtIndex:item.tag];
+        [self getSelectedViewControllers:newViewController];
+    }
+    
+
+}
 
 
 
@@ -211,7 +339,7 @@
         self.menuTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.menuTableView.delegate = self;
         self.menuTableView.dataSource = self;
-        
+        self.menuTableView.scrollEnabled=NO;
     }
     else{
         [self.menuTableView reloadData];
@@ -301,7 +429,7 @@
                 cell.textLabel.text = [NSString stringWithFormat:@"  %@",[(UIViewController *)[self.signupViewController objectAtIndex:indexPath.row] title]];
                 
             }
-            if (indexPath.row==7) {
+            if (indexPath.row==5) {
                 cell.imageView.image=[UIImage imageNamed:@"logout_menuicon.png"];
                 cell.textLabel.text=@" 로그 아웃";
             }
@@ -323,60 +451,112 @@
         
     
         [[NSNotificationCenter defaultCenter]postNotificationName:@"removeHome" object:nil];
-        //Dismiss Menu TableView with Animation
+    
+        
+        
+        //////////////////////////////
+        
+        
+        
         [UIView animateWithDuration:.5 animations:^{
             
-            self.mainsubView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.screen_height);
+           self.mainsubView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.screen_height);
             
         }completion:^(BOOL finished){
+            //After completion
+            //first check if new selected view controller is equals to previously selected view controller
             
             UIViewController *newViewController;
             BOOL signIn=[[NSUserDefaults standardUserDefaults]boolForKey:@"signIn"];
-            if (signIn) {
+            if (signIn==YES) {
                 if (indexPath.row<self.signupViewController.count) {
-                newViewController = [self.signupViewController objectAtIndex:indexPath.row];
-                _selectedSection = indexPath.section;
-                _selectedIndex = indexPath.row;
-                
-            if (indexPath.row==6) {
+                    newViewController = [self.signupViewController objectAtIndex:indexPath.row];
+                  
+            if ([newViewController isKindOfClass:[UINavigationController class]]) {
+                [(UINavigationController *)newViewController popToRootViewControllerAnimated:YES];
+            }
+            
+            if (self.selectedIndex==indexPath.row  && self.selectedSection == indexPath.section) {
+               // return;
+            }
+              
+                    if (indexPath.row==0) {
+                        [[NSNotificationCenter defaultCenter]postNotificationName:@"homeLoad" object:nil];
+                        [[NSNotificationCenter defaultCenter]removeObserver:self name:@"homeLoad" object:nil];
+                        self.customBar.selectedItem=[self.customBar.items objectAtIndex:0];
+
+                                          }
+         //   else if (indexPath.row==1) {
+            //       [[NSNotificationCenter defaultCenter]postNotificationName:@"balanceDetail" object:nil];
+           //     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"balanceDetail" object:nil];
+           //                 }
+            else if(indexPath.row==1){
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"paymentHistory" object:nil userInfo:nil];
+                [[NSNotificationCenter defaultCenter]removeObserver:self name:@"paymentHistory" object:nil];
+                 self.customBar.selectedItem=nil;
+            }
+                    
+            else if(indexPath.row==2){
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"clickHistory" object:nil userInfo:nil];
+                [[NSNotificationCenter defaultCenter]removeObserver:self name:@"clickHistory" object:nil];
+                 self.customBar.selectedItem=nil;
+            }
+           // else if(indexPath.row==4){
+           //   [[NSNotificationCenter defaultCenter]postNotificationName:@"clickHistory" object:nil];
+           //     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"clickHistory" object:nil];
+           // }
+            else if(indexPath.row==3){
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"cashWithdraw" object:nil userInfo:nil];
+                [[NSNotificationCenter defaultCenter]removeObserver:self name:@"cashWithdraw" object:nil];
+                 self.customBar.selectedItem=nil;
+            }
+
+           
+            else  if (indexPath.row==4) {
                 
                 [[NSNotificationCenter defaultCenter]postNotificationName:@"profileEdit" object:nil userInfo:nil];
                 [[NSNotificationCenter defaultCenter]removeObserver:self name:@"profileEdit" object:nil];
-                self.customBar.selectedItem = [self.customBar.items objectAtIndex:6];
+                 self.customBar.selectedItem=nil;
             }
-                    if (indexPath.row==1) {
-                        [[NSNotificationCenter defaultCenter]postNotificationName:@"balanceDetail" object:nil userInfo:nil];
-                        [[NSNotificationCenter defaultCenter]removeObserver:self name:@"balanceDetail" object:nil];
-                        self.customBar.selectedItem = [self.customBar.items objectAtIndex:1];
-                    }
-                    if(indexPath.row==2){
-                        [[NSNotificationCenter defaultCenter]postNotificationName:@"paymentHistory" object:nil userInfo:nil];
-                        [[NSNotificationCenter defaultCenter]removeObserver:self name:@"paymentHistory" object:nil];
-                        self.customBar.selectedItem = [self.customBar.items objectAtIndex:2];
-
-                    }
-                    if(indexPath.row==3){
-                        [[NSNotificationCenter defaultCenter]postNotificationName:@"History" object:nil userInfo:nil];
-                        [[NSNotificationCenter defaultCenter]removeObserver:self name:@"History" object:nil];
-                        self.customBar.selectedItem = [self.customBar.items objectAtIndex:3];
-                        
-                    }
-        }
+           
+                   
+            _selectedSection = indexPath.section;
+            _selectedIndex = indexPath.row;
             
-            if (indexPath.row==7) {
-                [self singOutFunction];
-                return;
+           
+                }
+                if (indexPath.row==5) {
+                    [self singOutFunction];
+                    return;
+                }
             }
-        }
             else{
-                
                 newViewController = [self.viewControllers objectAtIndex:indexPath.row];
+                if ([newViewController isKindOfClass:[UINavigationController class]]) {
+                    [(UINavigationController *)newViewController popToRootViewControllerAnimated:YES];
+                }
+                
+                if (indexPath.row==0) {
+                    [[NSNotificationCenter defaultCenter]postNotificationName:@"homeLoad" object:nil];
+                    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"homeLoad" object:nil];
+                    self.customBar.selectedItem=[self.customBar.items objectAtIndex:0];
+                }
+                else if (indexPath.row==1) {
+                    [[NSNotificationCenter defaultCenter]postNotificationName:@"signIn" object:nil];
+                    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"signIn" object:nil];
+                     self.customBar.selectedItem=nil;
+                }
+                else if(indexPath.row==2){
+                    [[NSNotificationCenter defaultCenter]postNotificationName:@"signUp" object:nil userInfo:nil];
+                    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"signUp" object:nil];
+                     self.customBar.selectedItem=nil;
+                }
                 _selectedSection = indexPath.section;
                 _selectedIndex = indexPath.row;
-
             }
-            [self getSelectedViewControllers:newViewController];
+             [self getSelectedViewControllers:newViewController];
         }];
+        
     }//Index Path 1 End
 }
 
@@ -399,14 +579,26 @@
 -(void) updateViewContainer{
     self.selectedViewController.view.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     self.selectedViewController.view.frame=self.contentContainerView.bounds;
-    self.headerTitleLabel.text = self.selectedViewController.title;
+   // self.headerTitleLabel.text = self.selectedViewController.title;
+  
+    
+    NSMutableAttributedString *text3 =
+    [[NSMutableAttributedString alloc]
+     initWithAttributedString: self.headerTitleLabel.attributedText];
+    
+    [text3 addAttribute:NSFontAttributeName
+                  value:[UIFont boldSystemFontOfSize:18]
+                  range:NSMakeRange(3, 3)];
+    [self.headerTitleLabel setAttributedText: text3];
+
+    //self.headerTitleLabel.text=
     [self.contentContainerView addSubview:self.selectedViewController.view];
     NSLog(@"Selected ViewController Title ===%@",self.selectedViewController.title);
 }
 
 -(void)changeHeaderTitle:(NSNotification*)notify
 {
-    self.headerTitleLabel.text=notify.object;
+    //self.headerTitleLabel.text=notify.object;
 }
 
 #pragma mark- sign Out functionality
@@ -438,14 +630,23 @@
     
     id json=[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
     NSLog(@" sign in response %@",json);
-    [[NSUserDefaults standardUserDefaults]setBool:NO forKey:@"signIn"];
-    [[NSUserDefaults standardUserDefaults]synchronize];
-    
-    [SingletonClass sharedSingleton].login_userId=nil;
-    [SingletonClass sharedSingleton].userEmail=nil;
-    [SingletonClass sharedSingleton].fname=nil;
-    [self changeToSingin];
-    [self.menuTableView reloadData];
+    if ([[json objectForKey:@"status"] isEqualToString:@"1"]) {
+        UIAlertView * alert=[[UIAlertView alloc]initWithTitle:@" 성공적으로 로그 아웃." message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+        [alert show];
+        
+        [[NSUserDefaults standardUserDefaults]setBool:NO forKey:@"signIn"];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"email"];
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"password"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+        
+        [SingletonClass sharedSingleton].login_userId=nil;
+        [SingletonClass sharedSingleton].userEmail=nil;
+        [SingletonClass sharedSingleton].fname=nil;
+        [self changeToSingin];
+        [self.menuTableView reloadData];
+    }
+  
 }
 
 

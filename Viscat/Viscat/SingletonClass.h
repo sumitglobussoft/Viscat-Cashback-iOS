@@ -16,10 +16,13 @@
 
 // Detail page data
 
-@property(nonatomic,strong)NSMutableArray * imageUrl,* detailDescription,* detail_title,*dataArr;
+@property(nonatomic,strong)NSMutableArray * imageUrl,* detailDescription,* detail_title,*dataArr,* bannerImages;
 @property(nonatomic,strong)NSString * topTitle,* detail_description;
 @property(nonatomic,strong)NSString * detailImgUrl,* cashBackStr;
 @property(nonatomic,strong)NSString * coupns, *reviews,*fav,* added,* webUrl;
 
 @property(nonatomic,strong)NSString* login_userId,*fname,*userEmail,* lname,*fbId;
+@property(nonatomic)BOOL isFromDetailpage;
+
+@property(nonatomic)BOOL isActivenetworkConnection,isFromTab;
 @end

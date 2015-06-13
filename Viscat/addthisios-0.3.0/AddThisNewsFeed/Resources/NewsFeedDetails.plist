@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>newsFeed</key>
+		<string>Venture Beat</string>
+		<key>newsFeedURL</key>
+		<string>http://feeds.venturebeat.com/Venturebeat</string>
+	</dict>
+	<dict>
+		<key>newsFeed</key>
+		<string>The Next Web</string>
+		<key>newsFeedURL</key>
+		<string>http://thenextweb.com/feed-combinator/main</string>
+	</dict>
+	<dict>
+		<key>newsFeed</key>
+		<string>TechMeme</string>
+		<key>newsFeedURL</key>
+		<string>http://www.techmeme.com/index.xml</string>
+	</dict>
+	<dict>
+		<key>newsFeed</key>
+		<string>AddThis</string>
+		<key>newsFeedURL</key>
+		<string>http://feeds.feedburner.com/addthis/community</string>
+	</dict>
+	<dict>
+		<key>newsFeed</key>
+		<string>TechCrunch</string>
+		<key>newsFeedURL</key>
+		<string>http://feeds.feedburner.com/Techcrunch</string>
+	</dict>
+	<dict>
+		<key>newsFeed</key>
+		<string>ReadWriteWeb</string>
+		<key>newsFeedURL</key>
+		<string>http://feeds.feedburner.com/readwriteweb</string>
+	</dict>
+	<dict>
+		<key>newsFeed</key>
+		<string>Mashable</string>
+		<key>newsFeedURL</key>
+		<string>http://feeds.mashable.com/Mashable</string>
+	</dict>
+	<dict>
+		<key>newsFeed</key>
+		<string>GigaOm</string>
+		<key>newsFeedURL</key>
+		<string>http://feeds.feedburner.com/ommalik</string>
+	</dict>
+</array>
+</plist>

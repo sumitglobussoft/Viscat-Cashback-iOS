@@ -7,8 +7,22 @@
 //
 
 #import "AppDelegate.h"
-//#import <KakaoOpenSDK/KakaoOpenSDK.h>
+#import <KakaoOpenSDK/KakaoOpenSDK.h>
+#import "SingletonClass.h"
 
+
+#import "LoginViewController.h"
+#import "SignUpViewController.h"
+#import "CashWithdrawViewController.h"
+#import "ClickHistoryViewController.h"
+#import "ProfileEditViewController.h"
+#import "CustomMenuViewController.h"
+#import "InviteFriendViewController.h"
+#import "BalanceViewController.h"
+#import "PaymentHistoryViewController.h"
+#import "HomeViewController.h"
+#import "DetailPageViewController.h"
+#import "HistoryViewController.h"
 
 @interface AppDelegate ()
 
@@ -16,8 +30,10 @@
 
 @implementation AppDelegate
 
-
+@synthesize window;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+     [self checkNetworkStatus];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus) name:@"reachability" object:nil];
     return [[FBSDKApplicationDelegate sharedInstance] application:application
                                     didFinishLaunchingWithOptions:launchOptions];
     
@@ -27,16 +43,16 @@
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
   
-//    if ([KOSession isKakaoAccountLoginCallback:url]) {
-//        return [KOSession handleOpenURL:url];
-//    }
-//    else{
+   if ([KOSession isKakaoAccountLoginCallback:url]) {
+       return [KOSession handleOpenURL:url];
+   }
+    else{
         return [[FBSDKApplicationDelegate sharedInstance] application:application
                                                               openURL:url
                                                     sourceApplication:sourceApplication
                                                            annotation:annotation];
-   // }
-    
+   }
+
 }
 
 
@@ -56,7 +72,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
      [FBSDKAppEvents activateApp];
-     //[KOSession handleDidBecomeActive];
+     [KOSession handleDidBecomeActive];
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
@@ -66,7 +82,156 @@
     [self saveContext];
 }
 
+#pragma  mark -
+// Check Network Status of App
+-(void) checkNetworkStatus{
+    self.internetReachability = [Reachability reachabilityForInternetConnection];
+    
+    [self.internetReachability startNotifier];
+    
+    NetworkStatus a = [self.internetReachability currentReachabilityStatus];
+    switch (a) {
+        case NotReachable:
+            NSLog(@"Not Reachable");
+            [SingletonClass sharedSingleton].isActivenetworkConnection = NO;
+            break;
+        case ReachableViaWiFi:
+            NSLog(@"Reachable via WAN");
+           [SingletonClass sharedSingleton].isActivenetworkConnection = YES;
+            break;
+        case ReachableViaWWAN:
+            NSLog(@"Reachable Via Wifi");
+            [SingletonClass sharedSingleton].isActivenetworkConnection = YES;
+            break;
+            
+        default:
+            break;
+    }
+    
+}
 
+
+-(void)goToHomeView {
+    
+    // before sign in
+    HomeViewController * homeVC=[[HomeViewController alloc]init];
+    homeVC.title=@"홈";
+   
+    
+    LoginViewController *loginVC = [[LoginViewController alloc]init];
+    loginVC.title = @"로그인";
+    
+    SignUpViewController *signupVC= [[SignUpViewController alloc] init];
+    signupVC.title = @"가입하기";
+    
+    /////////////////////////////////////////////////////////////////////
+    
+//    BalanceViewController* balanceVC=[[BalanceViewController alloc]init];
+//    balanceVC.title=@"잔고";
+    
+    PaymentHistoryViewController * paymentHistoryVC=[[PaymentHistoryViewController alloc]init];
+    paymentHistoryVC.title=@"지불 내역";
+    
+   // HistoryViewController * HistoryVC=[[HistoryViewController alloc]init];
+   // HistoryVC.title=@"내역";
+    
+    ClickHistoryViewController  * clickHistory=[[ClickHistoryViewController alloc]init];
+    clickHistory.title=@"내역 클릭";
+    
+    CashWithdrawViewController *cashWithdrawVC = [[CashWithdrawViewController alloc]init];
+    cashWithdrawVC.title = @"현금인출";
+    
+   // InviteFriendViewController * inviteVC=[[InviteFriendViewController alloc]init];
+   // inviteVC.title=@"친구에게 소개하기" ;
+    
+    ProfileEditViewController * profileEditVC=[[ProfileEditViewController alloc]init];
+    profileEditVC.title=@"내 프로필";
+    
+   
+
+    UINavigationController *homeNavigationController = [[UINavigationController alloc] initWithRootViewController:homeVC];
+     homeNavigationController.navigationBar.hidden = YES;
+
+    UINavigationController *paymentHistoryVController = [[UINavigationController alloc] initWithRootViewController:paymentHistoryVC];
+    homeNavigationController.navigationBar.hidden = YES;
+    
+    UINavigationController *clickHistoryController = [[UINavigationController alloc] initWithRootViewController:clickHistory];
+    clickHistoryController.navigationBar.hidden = YES;
+
+    UINavigationController *cashWithdrawVController = [[UINavigationController alloc] initWithRootViewController:cashWithdrawVC];
+    cashWithdrawVController.navigationBar.hidden = YES;
+
+    UINavigationController *profileEditVController = [[UINavigationController alloc] initWithRootViewController:profileEditVC];
+    profileEditVController.navigationBar.hidden = YES;
+
+    
+    UINavigationController *loginNavigationController = [[UINavigationController alloc] initWithRootViewController:loginVC];
+    loginNavigationController.navigationBar.hidden = YES;
+    
+    NSString * username=[[NSUserDefaults standardUserDefaults]objectForKey:@"email"];
+    NSString * password=[[NSUserDefaults standardUserDefaults]objectForKey:@"password"];
+    if ([username length]!=0 && [password length]!=0) {
+        [self loginAction :username andPass:password];
+    }
+    CustomMenuViewController *customMenuView =[[CustomMenuViewController alloc] init];
+    customMenuView.numberOfSections = 1;
+    customMenuView.viewControllers = @[homeNavigationController,loginNavigationController,signupVC];
+   // customMenuView.signupViewController=@[homeNavigationController,balanceVC,paymentHistoryVC,HistoryVC,clickHistory,cashWithdrawVC,inviteVC,profileEditVC];
+    
+    customMenuView.signupViewController=@[homeNavigationController,paymentHistoryVController,clickHistoryController,cashWithdrawVController,profileEditVController];
+
+    
+    UINavigationController *navigation = [[UINavigationController alloc]initWithRootViewController:customMenuView];
+    self.window.rootViewController = navigation;
+    
+    [self.window setRootViewController:customMenuView];
+   // return customMenuView;
+}
+
+-(void)loginAction :(NSString *)username andPass:(NSString *)pass{
+   
+        NSError * error;
+        NSURLResponse * urlResponse;
+        
+        NSString * getUrlStr=[NSString stringWithFormat:@"http://www.biscash.com/windex.php?method=signin&email=%@&password=%@",username,pass];
+        
+        NSURL * getUrl=[NSURL URLWithString:getUrlStr];
+        NSMutableURLRequest * request=[[NSMutableURLRequest alloc]initWithURL:getUrl cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:50];
+        [request setHTTPMethod:@"GET"];
+        [request addValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+        
+        NSData * data=[NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
+        if (data==nil) {
+            return;
+        }
+        
+        id json=[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+        
+        if ([[json objectForKey:@"status"]isEqualToString:@"1"])
+        {
+            
+            
+            NSMutableDictionary * dict=[NSMutableDictionary dictionary];
+            dict=[json objectForKey:@"UserInfo"];
+            [SingletonClass sharedSingleton].login_userId=[dict objectForKey:@"user_id"];
+            [SingletonClass sharedSingleton].fname=[dict objectForKey:@"fname"];
+            [SingletonClass sharedSingleton].userEmail=[dict objectForKey:@"email"];
+            [[NSUserDefaults standardUserDefaults]setBool:YES forKey:@"signIn"];
+            [[NSUserDefaults standardUserDefaults]synchronize];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"HomeScreen" object:nil];
+            [[NSNotificationCenter defaultCenter]removeObserver:self name:@"HomeScreen" object:nil];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadmenuTable" object:nil];
+            [[NSNotificationCenter defaultCenter]removeObserver:self name:@"reloadmenuTable" object:nil];
+
+        }
+        else
+        {
+            UIAlertView * alert=[[UIAlertView alloc]initWithTitle:@"잘못된 이메일 / 암호" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+            [alert show];
+        }
+
+
+}
 
 
 #pragma mark - Core Data stack
@@ -111,7 +276,7 @@
         error = [NSError errorWithDomain:@"YOUR_ERROR_DOMAIN" code:9999 userInfo:dict];
         // Replace this with code to handle the error appropriately.
         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+       
         abort();
     }
     
@@ -143,7 +308,7 @@
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
             // Replace this implementation with code to handle the error appropriately.
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+         
             abort();
         }
     }

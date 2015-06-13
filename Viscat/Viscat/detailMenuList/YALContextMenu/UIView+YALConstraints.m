@@ -22,7 +22,7 @@
                                                      relatedBy:NSLayoutRelationEqual
                                                         toItem:self
                                                      attribute:NSLayoutAttributeTop
-                                                    multiplier:2.0
+                                                    multiplier:1.0
                                                       constant:insets.top]];
     
     [self addConstraint:[NSLayoutConstraint constraintWithItem:view

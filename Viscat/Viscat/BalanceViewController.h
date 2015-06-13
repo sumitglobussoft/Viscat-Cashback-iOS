@@ -14,4 +14,5 @@
     NSNumberFormatter * formater;
 }
 @property(nonatomic)UITableView * balanceTable;
+@property(nonatomic)UIActivityIndicatorView * activityLoad;
 @end

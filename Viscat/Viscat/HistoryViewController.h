@@ -14,4 +14,5 @@
 }
 
 @property(nonatomic)UITableView * HistoryTable;
+@property(nonatomic)UIActivityIndicatorView * activityLoad;
 @end

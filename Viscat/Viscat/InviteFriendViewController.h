@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface InviteFriendViewController : UIViewController<UITextFieldDelegate>
+@interface InviteFriendViewController : UIViewController<UITextFieldDelegate,UITextViewDelegate>
 {
     CGSize  windowSize;
     UILabel * bottomLbl,*tellFriend,*ruleOne,*ruleTwo,*ruleThree,* requiredLbl1,*requiredLbl2;

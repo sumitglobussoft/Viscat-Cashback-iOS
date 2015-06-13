@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CustomMenuViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
-
+@interface CustomMenuViewController : UIViewController<UITableViewDataSource, UITableViewDelegate,UITabBarDelegate>
+{
+    NSArray * tabArr,* loginArr;
+}
 
 @property(nonatomic,strong)UINavigationController * nav;
 @property (nonatomic, assign) CGFloat screen_height;
@@ -43,6 +45,7 @@
 @interface UIViewController (CustomMenuViewControllerItem)
 
 @property (nonatomic, strong) CustomMenuViewController *customMenuViewController;
+
 
 
 @end

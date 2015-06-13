@@ -8,13 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+#import "CustomMenuViewController.h"
 @interface ViewController : UIViewController
 
 {
     CGSize windoSize;
 }
 
-- (void)goToHomeView;
+
 
 @end
 

@@ -14,4 +14,9 @@
 }
 @property(nonatomic,strong)UILabel * cellTitleLabel,* cellVisitors,  *cellLastVisit;
 
+
+@property(nonatomic,strong)UIImageView * storeLogo,*bgImgView,*ratingStar;
+@property(nonatomic,strong)UILabel * storeDescription,* cashBack,* title,*rateLbl,* visitorsLbl,* DateTimeLbl;
+
+@property(nonatomic,strong)UIButton * gotoStore;
 @end

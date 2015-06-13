@@ -14,5 +14,5 @@
 }
 
 @property(nonatomic)UITableView * paymentHistoryTable;
-
+@property(nonatomic)UIActivityIndicatorView * activityLoad;
 @end

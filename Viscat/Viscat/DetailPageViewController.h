@@ -14,18 +14,20 @@
 
 
 @interface DetailPageViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UITableViewDelegate,
-UITableViewDataSource,YALContextMenuTableViewDelegate>
+UITableViewDataSource,UITextFieldDelegate,UITextViewDelegate,UIAlertViewDelegate>
 {
     CGSize windowSize;
     UIView * bottomCollectioView;
      NSMutableArray  * imageUrl,* dataArr,* addedArr, * coupnArr,* favArr,* reviewArr,*retailerId,* storeUrl;;
 }
 @property(nonatomic)UICollectionView * mainCollectionView;
-@property(nonatomic,strong)NSString * topTitle,* detailDescription;
+@property(nonatomic,strong)NSString * topTitle,* detailDescription,*starsCount;
 @property(nonatomic,strong)NSString * detailImgUrl,* cashBackStr,*retailId;
 
-@property (nonatomic, strong) YALContextMenuTableView* contextMenuTableView;
+@property (nonatomic, strong) UITableView * contextMenuTableView;
 
 @property (nonatomic, strong) NSArray *menuTitles;
 @property (nonatomic, strong) NSArray *menuIcons;
+
+@property(nonatomic,strong)UITableView * listTable;
 @end

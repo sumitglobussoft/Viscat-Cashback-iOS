@@ -14,4 +14,5 @@
     CGSize  windowSize;
 }
 
+@property(nonatomic,strong)NSString * retailerID;
 @end

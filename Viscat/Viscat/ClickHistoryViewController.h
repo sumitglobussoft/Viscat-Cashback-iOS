@@ -12,4 +12,5 @@
 {
     UITableView * clickHistory;
 }
+@property(nonatomic,strong)UIActivityIndicatorView *activityLoad;
 @end

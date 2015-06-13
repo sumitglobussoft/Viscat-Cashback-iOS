@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CashWithdrawViewController : UIViewController<UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
+@interface CashWithdrawViewController : UIViewController<UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate,UITextViewDelegate>
 {
     CGSize windowSize;
     UILabel * topLabel,*bottomLbl,*userName;
@@ -21,4 +21,6 @@
 @property(nonatomic,strong)UITextField * userText;
 @property(nonatomic,strong)UIButton * loginButton,* passwordbtn;
 @property(nonatomic)UIPickerView * pickerView;
+@property(nonatomic)BOOL isPayMethodSelected;
+@property(nonatomic)UIActivityIndicatorView * activityLoad;
 @end
